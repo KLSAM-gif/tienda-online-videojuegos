@@ -21,6 +21,7 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
       - gamingstore_data:/var/lib/mysql
+      - ./database/gamingstore-estructura.sql:/docker-entrypoint-initdb.d/01-estructura.sql:ro
 
 volumes:
   gamingstore_data:
