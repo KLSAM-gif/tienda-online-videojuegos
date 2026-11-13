@@ -1,99 +1,167 @@
 # Gaming Store
 
-Tienda digital de videojuegos (PC, Xbox y PlayStation), accesorios y productos físicos, con el programa de fidelización **Gaming Points**.
+Tienda digital de videojuegos para PC, Xbox y PlayStation, accesorios y productos físicos, con un programa de fidelización llamado *Gaming Points*.
 
-> **Prototipo frontend.** HTML5 + CSS3 + JavaScript puro, con **LocalStorage** simulando el backend. Todo lo simulado está marcado en el código (`js/api.js`, `js/data.js`) y aquí.
+## Tecnologías utilizadas
 
-## Cómo ejecutarlo
+- HTML5
+- CSS3
+- JavaScript
+- PHP 8.2
+- MySQL 8.0
+- Docker y Docker Compose
+- Git y GitHub
 
-No requiere instalación ni dependencias. Se recomienda servirlo por HTTP:
+## Requisitos
 
-```bash
-cd GamingStore
-python3 -m http.server 8080      # o: npx serve .
-# abrir http://localhost:8080
-```
+Para ejecutar el proyecto se necesita:
 
-Con Docker (solo sirve los archivos estáticos con nginx; el backend aún no existe):
+- Docker Desktop instalado y en funcionamiento.
+- Git para clonar el repositorio.
+- Un archivo .env con las variables de conexión a la base de datos.
 
-```bash
-docker build -t gaming-store .
-docker run -p 8080:80 gaming-store
-```
+## Cómo descargar el proyecto
 
-## Datos de demostración
+Clonar el repositorio desde GitHub:
 
-| Dato | Valor |
-|---|---|
-| Usuario demo cliente | `demo@gamingstore.mx` / `demo1234` (botón «Usar demo de cliente» en el login) |
-| Usuario demo administrador | `admin@gamingstore.mx` / `AdminGS2026!` (botón «Usar demo de administrador» en el login) |
-| Tarjeta aprobada | `4242 4242 4242 4242` |
-| Tarjeta rechazada | número terminado en `0002` |
-| Error de procesamiento | número terminado en `9999` |
-| Restablecer todo | Perfil → Opciones y configuración → «Restablecer datos de demostración» |
-
-No se conectan pasarelas de pago reales, **no se guardan números de tarjeta**, las claves de juego son ficticias (`DEMO-XXXXX-…`) y la autenticación/roles **son simulados en LocalStorage**. El panel incluye indicadores generales, gestión de productos (alta/edición/retiro), consulta y seguimiento manual de pedidos (avanzar envío/cancelar con reversión de stock y puntos cuando aplica), listado de usuarios y asignación de roles para demostración. No publiques estas credenciales ni uses este control de acceso en producción: cualquier usuario puede modificar LocalStorage. La autorización real debe implementarse en Spring Security y validarse en cada endpoint.
+bash
+git clone https://github.com/KLSAM-gif/tienda-online-videojuegos.git
 
 
-## Panel de administración (modo demostración)
+Entrar a la carpeta:
 
-1. Abre `login.html`.
-2. Pulsa **Usar demo de administrador** o ingresa `admin@gamingstore.mx` / `AdminGS2026!`.
-3. El inicio de sesión de una cuenta con rol `admin` abre `pages/admin.html`.
-4. El panel permite consultar indicadores, crear/editar/retirar productos, consultar pedidos y cambiar roles de usuario (cliente/administrador). Se protege cada método administrativo de la API simulada con una comprobación de rol.
+bash
+cd tienda-online-videojuegos
 
-**Importante:** esta implementación permite probar el flujo administrativo en el frontend, pero no constituye seguridad real. Los roles y las contraseñas viven en LocalStorage y pueden alterarse desde DevTools. Antes de producción migra usuarios, roles y permisos al backend; almacena contraseñas con BCrypt y aplica autorización por endpoint con Spring Security. Nunca confíes en los permisos enviados por el navegador.
+
+## Configuración de variables de entorno
+
+Crear un archivo llamado .env en la carpeta principal del proyecto, tomando como referencia el archivo .env.example.
+
+Configurar las siguientes variables:
+
+env
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=gamingstore
+DB_USER=root
+DB_PASSWORD=
+
+
+Al ejecutar Docker Compose, la aplicación utiliza el nombre del servicio db para comunicarse con MySQL.
+
+*Importante:* El archivo .env contiene información de configuración privada y no debe subirse a GitHub. Está excluido mediante .gitignore y .dockerignore.
+
+## Ejecución con Docker
+
+El proyecto utiliza Docker Compose para ejecutar dos servicios:
+
+- *app:* contiene PHP 8.2 y Apache, donde se ejecuta la aplicación.
+- *db:* contiene MySQL 8.0, donde se almacenan los datos.
+
+Para construir las imágenes y levantar los servicios, ejecutar:
+
+bash
+docker compose up -d --build
+
+
+Para comprobar que los contenedores estén funcionando:
+
+bash
+docker compose ps
+
+
+Abrir la aplicación en el navegador:
+
+text
+http://localhost:8080
+
+
+Para comprobar el funcionamiento de la API:
+
+text
+http://localhost:8080/api/?action=health
+
+
+La respuesta debe mostrar que la conexión con la base de datos funciona correctamente, junto con información de productos, recompensas, plataformas y requisitos.
+
+Para detener los servicios:
+
+bash
+docker compose down
+
+
+Los datos de MySQL se conservan en un volumen de Docker llamado gamingstore_data.
+
+## Base de datos
+
+El proyecto utiliza MySQL y necesita contar con las tablas correspondientes para que la API pueda realizar sus consultas.
+
+Al ejecutar el proyecto por primera vez, se debe importar una copia de la base de datos al servicio MySQL. Esta copia debe obtenerse de una exportación SQL del proyecto.
+
+El archivo de respaldo debe mantenerse fuera del repositorio si contiene información privada o datos de usuarios.
 
 ## Reglas de Gaming Points
 
-- 1 punto por cada `$10 MXN` pagados (se redondea hacia abajo); 1 punto = `$1 MXN` de descuento.
-- Los puntos se acreditan **solo al confirmar la compra**, una única vez (el saldo sale del historial; recargar la página no duplica nada).
-- Lo pagado con puntos o con cupón **no genera puntos**.
-- No se puede usar más puntos que el saldo ni más que el total de la compra.
-- Cancelar o reembolsar un pedido revierte los puntos obtenidos y devuelve los usados.
-- Niveles Bronce / Plata / Oro / Diamante según puntos **acumulados** (canjear no baja de nivel). Los umbrales se configuran en `js/data.js` (`CONFIG`) o desde Perfil → Opciones y configuración.
+- Se obtiene 1 punto por cada $10 MXN pagados.
+- Cada punto equivale a $1 MXN de descuento.
+- Los puntos se acreditan al confirmar la compra.
+- Los pagos realizados con puntos o cupones no generan puntos.
+- No se pueden utilizar más puntos de los disponibles ni superar el total de la compra.
+- Al cancelar o reembolsar un pedido se revierten los puntos correspondientes.
+- Los niveles Bronce, Plata, Oro y Diamante dependen de los puntos acumulados.
 
-## Estructura
+## Estructura del proyecto
 
-```
+text
 GamingStore/
-├── index.html · login.html · register.html
-├── pages/    catalogo · detalles · carrito · checkout · perfil · biblioteca · pedidos · recompensas · error
-├── css/      styles.css (base, layout) · components.css · responsive.css
+├── api/
+│   ├── config.php
+│   └── index.php
+├── assets/
+├── css/
 ├── js/
-│   ├── data.js        catálogo, recompensas y reglas (DATOS SIMULADOS)
-│   ├── api.js         capa de datos sobre LocalStorage  ← se sustituye por fetch() al backend
-│   ├── app.js         utilidades de UI, encabezado, modales, errores
-│   ├── auth.js · catalogo.js · carrito.js · checkout.js
-│   └── puntos.js · pedidos.js · biblioteca.js · perfil.js · home.js · detalles.js
-└── assets/   images/ · games/ · icons/   (las portadas se generan en SVG desde JS; aquí irán las reales)
-```
-
-«Mis Gaming Points» y «Canjear puntos» viven en `perfil.html#puntos` y `recompensas.html`; accesorios es la pestaña *Accesorios* del catálogo (`catalogo.html?tipo=accesorios`).
-
-La **interfaz nunca toca LocalStorage directamente**: todas las páginas llaman a `GS.api.*` (asíncrono, ya devuelve promesas).
-
-## Migración a Spring Boot + MySQL
-
-Cada método de `GS.api` corresponde a un endpoint futuro:
-
-| Método actual | Endpoint propuesto |
-|---|---|
-| `register` / `login` / `logout` / `me` | `POST /api/auth/register`, `/login`, `/logout` · `GET /api/auth/me` |
-| `getGames` / `getGame` (incluye inventario) | `GET /api/games`, `GET /api/games/{id}` |
-| `checkout` | `POST /api/orders` (pago, puntos, stock y licencias en **una transacción**) |
-| `getOrders` / `getOrder` / `cancelOrder` | `GET /api/orders`, `GET /api/orders/{id}`, `POST /api/orders/{id}/cancel` |
-| `getLibrary` / `markDownloaded` | `GET /api/library` · `POST /api/library/{id}/download` |
-| `getPoints` | `GET /api/points` (historial/ledger) |
-| `getRewards` / `redeemReward` / `getCoupons` | `GET /api/rewards` · `POST /api/rewards/{id}/redeem` · `GET /api/coupons` |
-| `updateProfile` | `PUT /api/users/me` |
-
-Notas para el backend: el saldo de puntos debe calcularse desde un historial de movimientos (no un contador editable), la validación de stock, puntos y totales debe repetirse en el servidor, y las contraseñas deben guardarse con BCrypt.
+├── pages/
+├── index.html
+├── login.html
+├── register.html
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
+├── .gitignore
+├── .env.example
+└── README.md
 
 
-## Mejoras del panel de administración
+## API y servicios
 
-- El panel consulta el catálogo completo de juegos y accesorios, además de los productos agregados desde administración.
-- Incluye búsqueda por nombre, ID, descripción o plataforma y filtros por tipo y disponibilidad.
-- Permite agregar, editar y eliminar productos; actualizar precio, descripción, plataformas, stock, descuento y disponibilidad.
-- Las descripciones se sincronizan en los campos que consume el catálogo público para que los cambios se reflejen en la tienda.
+La API está desarrollada en PHP y permite realizar operaciones relacionadas con la información de la tienda y la base de datos.
+
+La conexión se realiza mediante PDO, utilizando variables de entorno para configurar el acceso a MySQL.
+
+El endpoint de comprobación permite verificar que el servicio PHP puede consultar la base de datos.
+
+## Uso de GitHub
+
+El código fuente del proyecto se encuentra disponible en:
+
+https://github.com/KLSAM-gif/tienda-online-videojuegos
+
+Para descargar los cambios más recientes:
+
+bash
+git pull
+
+
+Para consultar los cambios realizados:
+
+bash
+git status
+
+
+## Consideraciones
+
+- No se deben publicar archivos .env ni contraseñas.
+- Las credenciales de demostración no deben utilizarse en un entorno de producción.
+- Los datos de la base de datos deben importarse antes de probar las operaciones que los necesitan.
+- Docker permite ejecutar la aplicación y la base de datos en contenedores separados, facilitando su instalación y ejecución en otros equipos.
