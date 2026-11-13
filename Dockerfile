@@ -1,6 +1,13 @@
-# Sirve el frontend estático. Cuando exista el backend (Spring Boot + MySQL)
-# se añadirá un docker-compose con los servicios api y db.
-FROM nginx:1.27-alpine
-COPY . /usr/share/nginx/html
-RUN rm -f /usr/share/nginx/html/Dockerfile /usr/share/nginx/html/.dockerignore /usr/share/nginx/html/README.md
+FROM php:8.2-apache
+
+# Instalar la extensión necesaria para conectar PHP con MySQL
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Copiar los archivos del proyecto
+COPY . /var/www/html/
+
+# Activar el módulo de Apache para las rutas
+RUN a2enmod rewrite
+
+# Exponer el puerto 80
 EXPOSE 80
