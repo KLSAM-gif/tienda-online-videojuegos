@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="clasico" data-bg="resplandor">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gaming Store | Videojuegos, accesorios y recompensas</title>
+  <meta name="description" content="Gaming Store: tienda digital de videojuegos para PC, Xbox y PlayStation con el programa Gaming Points.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="inicio" data-base="">
+  <div id="site-header"></div>
+
+  <main class="container" id="homePage">
+    <!-- Banner principal -->
+    <section class="hero" id="hero" aria-label="Juego destacado"></section>
+
+    <section class="section">
+      <div class="section-head"><h2>Más vendidos</h2><a class="link-more" href="pages/catalogo.html?orden=vendidos">Ver todos →</a></div>
+      <div class="grid-cards" id="secTop"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Nuevos lanzamientos</h2><a class="link-more" href="pages/catalogo.html?orden=recientes">Ver todos →</a></div>
+      <div class="grid-cards" id="secNew"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Ofertas y promociones</h2><a class="link-more" href="pages/catalogo.html?tipo=todos&ofertas=1">Ver todas →</a></div>
+      <div class="grid-cards" id="secOffers"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Accesorios y productos físicos</h2><a class="link-more" href="pages/catalogo.html?tipo=accesorios">Ver todos →</a></div>
+      <div class="grid-cards" id="secAcc"></div>
+    </section>
+
+    <!-- Beneficios del programa de recompensas -->
+    <section class="section benefits" aria-labelledby="benTitle">
+      <div class="section-head"><h2 id="benTitle">Gaming Points: juega, acumula y canjea</h2></div>
+      <p class="muted">Cada compra confirmada suma puntos que puedes usar como descuento o cambiar por recompensas exclusivas.</p>
+      <div class="benefit-grid">
+        <div class="benefit"><div class="b-icon">⭐</div><h3>1 punto por cada $10</h3><p>Acumula puntos con cada compra completada de videojuegos y accesorios.</p></div>
+        <div class="benefit"><div class="b-icon">💸</div><h3>1 punto = $1 MXN</h3><p>Usa tus puntos como descuento en tu siguiente compra desde el checkout.</p></div>
+        <div class="benefit"><div class="b-icon">🎁</div><h3>Recompensas exclusivas</h3><p>Canjea tarjetas de regalo, cupones, fondos de pantalla y accesorios.</p></div>
+        <div class="benefit"><div class="b-icon">🏆</div><h3>Sube de nivel</h3><p>De Bronce a Diamante: cada nivel muestra tu progreso en tu perfil.</p></div>
+      </div>
+      <div class="level-strip" id="levelStrip"></div>
+      <div class="hero-actions" id="benefitCta"></div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/carrito.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>

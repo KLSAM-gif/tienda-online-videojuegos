@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="clasico" data-bg="resplandor">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo | Gaming Store</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body data-page="catalogo" data-base="../">
+  <div id="site-header"></div>
+
+  <main class="container" id="catalogPage">
+    <div class="page-title"><h1 id="catTitle">Videojuegos</h1><p>Explora por plataforma, género, precio y ofertas.</p></div>
+
+    <div class="toolbar">
+      <div class="seg" id="typeTabs">
+        <button data-tipo="juegos">Videojuegos</button>
+        <button data-tipo="accesorios">Accesorios</button>
+        <button data-tipo="todos">Todo</button>
+      </div>
+    </div>
+    <div class="chips-row" id="chips" aria-label="Categorías"></div>
+
+    <div class="catalog-layout">
+      <aside class="filters" id="filters" aria-label="Filtros">
+        <div class="filter-group"><h4>Plataforma</h4><div id="fPlatforms"></div></div>
+        <div class="filter-group" id="gGenres"><h4>Género</h4><div id="fGenres"></div></div>
+        <div class="filter-group"><h4>Precio máximo: <span id="fPriceLabel"></span></h4><input type="range" id="fPrice" min="100" max="2000" step="50" aria-label="Precio máximo"></div>
+        <div class="filter-group"><h4>Ofertas</h4><label class="check"><input type="checkbox" id="fOffers"> Solo con descuento</label></div>
+        <div class="filter-group"><h4>Popularidad</h4>
+          <select id="fPop" class="select" aria-label="Popularidad">
+            <option value="0">Todas</option><option value="80">Populares (80+)</option><option value="90">Muy populares (90+)</option>
+          </select>
+        </div>
+        <button class="btn btn-ghost btn-block" id="resetFilters">Limpiar filtros</button>
+      </aside>
+
+      <section>
+        <div class="toolbar">
+          <div><button class="btn btn-ghost btn-sm filters-toggle" id="filtersToggle">☰ Filtros</button> <span class="muted" id="resultCount"></span></div>
+          <select id="sortSel" class="select" aria-label="Ordenar por"></select>
+        </div>
+        <div class="grid-cards" id="results"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/app.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/carrito.js"></script>
+  <script src="../js/catalogo.js"></script>
+</body>
+</html>

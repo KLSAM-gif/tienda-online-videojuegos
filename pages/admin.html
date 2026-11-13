@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="clasico" data-bg="resplandor">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administración | Gaming Store</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .admin-hero{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin:1.5rem 0}
+    .admin-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0 1.25rem}
+    .admin-tabs button[aria-selected="true"]{background:var(--orange,#ff8c32);color:#111}
+    .admin-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.25rem}
+    .admin-stat{padding:1rem;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:12px;background:var(--panel,rgba(255,255,255,.04))}
+    .admin-stat strong{display:block;font-size:1.55rem;margin-top:.35rem}
+    .admin-table-wrap{overflow-x:auto}
+    .admin-table{width:100%;border-collapse:collapse;min-width:680px}
+    .admin-table th,.admin-table td{padding:.75rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.1);vertical-align:middle}
+    .admin-table th{white-space:nowrap}
+    .admin-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+    .admin-empty{padding:1.5rem;text-align:center;color:var(--muted,#aaa)}
+    .admin-note{margin:.75rem 0}
+    .admin-product-tools{display:flex;align-items:end;gap:.8rem;flex-wrap:wrap;margin:1rem 0}
+    .admin-product-tools .field{margin:0;min-width:170px;flex:1}
+    .admin-product-tools .admin-search{flex:2;min-width:220px}
+    .admin-product-tools .field span{font-size:.82rem;font-weight:600}
+    .admin-product-tools input,.admin-product-tools select{width:100%;padding:.65rem .8rem;border-radius:9px;background:var(--input);border:1px solid var(--border);color:var(--text)}
+    .admin-availability{display:flex;align-items:center;gap:.6rem;margin:.5rem 0 1rem;color:var(--text)}
+    @media(max-width:600px){.admin-hero{align-items:flex-start}.admin-hero h1{font-size:1.6rem}.admin-product-tools{align-items:stretch}.admin-product-tools .field{min-width:100%}}
+  </style>
+</head>
+<body data-page="admin" data-base="../">
+  <div id="site-header"></div>
+  <main class="container">
+    <section class="admin-hero">
+      <div><p class="muted small">GAMINGSTORE / CONTROL CENTER</p><h1>Panel de administración</h1><p class="muted">Gestiona el catálogo, consulta pedidos y administra los usuarios.</p></div>
+      <span class="badge">🛡️ Administrador</span>
+    </section>
+    <div id="adminError" class="alert alert-error" hidden></div>
+    <div id="adminStats" class="admin-stats" aria-live="polite"></div>
+    <div class="admin-tabs" role="tablist" aria-label="Secciones de administración">
+      <button class="btn btn-ghost" type="button" data-tab="products" aria-selected="true">📦 Productos</button>
+      <button class="btn btn-ghost" type="button" data-tab="orders" aria-selected="false">🧾 Pedidos</button>
+      <button class="btn btn-ghost" type="button" data-tab="users" aria-selected="false">👥 Usuarios</button>
+    </div>
+
+    <section id="tab-products" class="panel admin-tab-panel">
+      <div class="section-head" style="display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap">
+        <div><h2>Catálogo de productos</h2><p class="muted small">Crear, editar y retirar productos del catálogo.</p></div>
+        <button class="btn btn-orange" id="btnNewProduct" type="button">+ Agregar producto</button>
+      </div>
+      <div class="admin-product-tools">
+        <label class="field admin-search"><span>Buscar producto</span><input id="adminProductSearch" type="search" placeholder="Nombre, ID o plataforma…"></label>
+        <label class="field"><span>Tipo</span><select id="adminProductType"><option value="todos">Todos los productos</option><option value="juego">Juegos digitales</option><option value="accesorio">Accesorios / físicos</option></select></label>
+        <label class="field"><span>Estado</span><select id="adminProductStatus"><option value="todos">Todos</option><option value="activo">Activos</option><option value="inactivo">No disponibles</option></select></label>
+        <span id="adminProductCount" class="muted small" aria-live="polite">Cargando productos…</span>
+      </div>
+      <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>Producto</th><th>Tipo</th><th>Plataforma</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="adminProductList"><tr><td colspan="8">Cargando…</td></tr></tbody></table></div>
+    </section>
+
+    <section id="tab-orders" class="panel admin-tab-panel" hidden>
+      <h2>Pedidos de la tienda</h2><p class="muted small">Consulta pedidos y datos de contacto del comprador. El seguimiento simulado sigue las reglas del prototipo.</p>
+      <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Artículos</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="adminOrderList"><tr><td colspan="7">Cargando…</td></tr></tbody></table></div>
+    </section>
+
+    <section id="tab-users" class="panel admin-tab-panel" hidden>
+      <h2>Usuarios y permisos</h2><p class="muted small">Consulta las cuentas y asigna los roles de cliente o administrador. Mantén al menos un administrador activo.</p>
+      <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Usuario</th><th>Correo</th><th>Registro</th><th>Pedidos</th><th>Rol</th><th>Acciones</th></tr></thead><tbody id="adminUserList"><tr><td colspan="6">Cargando…</td></tr></tbody></table></div>
+    </section>
+  </main>
+
+  <div id="productModal" class="modal" hidden>
+    <div class="modal-content panel" style="max-width:560px;margin:2rem auto">
+      <h2 id="modalTitle">Agregar producto</h2>
+      <div id="modalError" class="alert alert-error" hidden></div>
+      <form id="productForm" style="margin-top:1rem">
+        <input type="hidden" id="prodId">
+        <div class="field"><label for="prodTitle">Nombre del producto</label><input id="prodTitle" type="text" maxlength="100" required></div>
+        <div class="field-row" style="display:flex;gap:10px;flex-wrap:wrap">
+          <div class="field" style="flex:1"><label for="prodType">Tipo</label><select id="prodType" style="width:100%;padding:8px"><option value="juego">Juego digital</option><option value="accesorio">Accesorio / físico</option></select></div>
+          <div class="field" style="flex:1"><label for="prodPlatform">Plataformas (separadas por coma)</label><input id="prodPlatform" type="text" placeholder="PC, Xbox, PlayStation" required></div>
+        </div>
+        <div class="field-row" style="display:flex;gap:10px;flex-wrap:wrap">
+          <div class="field" style="flex:1"><label for="prodPrice">Precio (MXN)</label><input id="prodPrice" type="number" min="0" step="0.01" required></div>
+          <div class="field" style="flex:1"><label for="prodStock">Stock (0 si no hay existencias)</label><input id="prodStock" type="number" min="0" step="1" value="10" required></div>
+          <div class="field" style="flex:1"><label for="prodDiscount">Descuento (%)</label><input id="prodDiscount" type="number" min="0" max="100" step="1" value="0" required></div>
+        </div>
+        <div class="field"><label for="prodDesc">Descripción</label><textarea id="prodDesc" rows="3" maxlength="1000"></textarea></div>
+        <label class="admin-availability"><input id="prodAvailable" type="checkbox" checked> Producto disponible en la tienda</label>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:1rem"><button class="btn btn-ghost" type="button" id="btnCancelModal">Cancelar</button><button class="btn btn-orange" type="submit" id="btnSaveProduct">Guardar producto</button></div>
+      </form>
+    </div>
+  </div>
+  <div id="site-footer"></div>
+  <script src="../js/data.js"></script><script src="../js/api.js"></script><script src="../js/app.js"></script><script src="../js/auth.js"></script><script src="../js/carrito.js"></script><script src="../js/admin.js"></script>
+</body>
+</html>

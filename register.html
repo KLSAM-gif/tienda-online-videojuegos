@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="clasico" data-bg="resplandor">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crear cuenta | Gaming Store</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="login" data-base="">
+  <div id="site-header"></div>
+  <main class="container">
+    <div class="auth-wrap">
+      <div class="panel">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 style="margin-bottom: 8px;">Crear cuenta</h1>
+          <p class="muted">Empieza a acumular Gaming Points con tu primera compra.</p>
+        </div>
+        <div id="formError" class="alert alert-error" hidden></div>
+        <form id="registerForm" novalidate>
+          <div class="field">
+            <label for="regName">Nombre Completo</label>
+            <input id="regName" placeholder="Tu nombre completo" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="regUsername">Nombre de Usuario</label>
+            <input id="regUsername" autocomplete="username" placeholder="usuario123" required>
+          </div>
+          <div class="field">
+            <label for="regEmail">Correo Electrónico</label>
+            <input id="regEmail" type="email" autocomplete="email" placeholder="tu@correo.com" required>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="regPassword">Contraseña</label>
+              <input id="regPassword" type="password" autocomplete="new-password" placeholder="••••••••" minlength="6" required>
+            </div>
+            <div class="field">
+              <label for="regPassword2">Repetir Contraseña</label>
+              <input id="regPassword2" type="password" autocomplete="new-password" placeholder="••••••••" required>
+            </div>
+          </div>
+          <button class="btn btn-orange btn-block btn-lg" type="submit" style="margin-top: 15px;">Crear Cuenta</button>
+        </form>
+        <p class="auth-links" style="text-align: center; margin-top: 20px;">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+      </div>
+    </div>
+  </main>
+  <div id="site-footer"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/carrito.js"></script>
+</body>
+</html>

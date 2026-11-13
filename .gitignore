@@ -1,0 +1,17 @@
+# Configuracion privada
+.env
+.env.*
+!.env.example
+
+# Dependencias
+node_modules/
+vendor/
+
+# Archivos temporales
+.DS_Store
+Thumbs.db
+*.log
+
+# Archivos de configuracion del editor
+.vscode/
+.idea/

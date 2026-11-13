@@ -1,0 +1,68 @@
+/* =====================================================================
+ * Gaming Store - Diseño responsive (computadoras, tabletas y celulares)
+ * ===================================================================== */
+
+@media (max-width: 1100px) {
+  .grid-4, .stat-grid, .benefit-grid { grid-template-columns: repeat(2, 1fr); }
+  .two-col { grid-template-columns: minmax(0, 1fr) 300px; }
+  .catalog-layout { grid-template-columns: 220px minmax(0, 1fr); }
+  .profile-layout { grid-template-columns: 260px minmax(0, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding: 26px; }
+  .hero-art { order: -1; }
+  .hero-art img { width: 200px; }
+  .two-col, .detail-layout, .points-hero, .footer-inner { grid-template-columns: 1fr; }
+  .summary, .filters { position: static; }
+  .profile-layout { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+
+  /* Catálogo: filtros desplegables */
+  .catalog-layout { grid-template-columns: 1fr; }
+  .filters-toggle { display: inline-flex; }
+  .filters { display: none; }
+  .filters.open { display: block; }
+  .req-grid { grid-template-columns: 1fr; }
+
+  /* Navegación tipo menú hamburguesa */
+  .burger { display: grid; place-items: center; }
+  .main-nav { display: none; }
+  .main-nav.open { display: block; }
+  .main-nav .container { flex-direction: column; padding: 6px 20px; }
+  .main-nav a { border-bottom: 0; border-left: 3px solid transparent; padding: 12px; }
+  .main-nav a.active { border-left-color: var(--orange); }
+}
+
+@media (max-width: 680px) {
+  .container { padding: 0 14px; }
+  main { padding-top: 20px; }
+  .header-inner { flex-wrap: wrap; height: auto; padding-top: 10px; padding-bottom: 10px; gap: 10px; }
+  .search { order: 3; max-width: none; flex-basis: 100%; }
+  .hide-sm, .user-info { display: none; }
+  .user-btn { padding: 4px; }
+  .grid-cards { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .gc-body { padding: 10px; }
+  .gc-actions { grid-template-columns: 1fr; }
+  .genre { display: none; }
+  .grid-2, .grid-3, .grid-4, .stat-grid, .benefit-grid, .field-row, .field-row.three, .radio-cards { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .cart-line { grid-template-columns: 64px 1fr; }
+  .cart-line img { width: 64px; }
+  .cl-qty, .cl-price { grid-column: 2; text-align: left; }
+  .lib-grid { grid-template-columns: 1fr; }
+  .lib-card { grid-template-columns: 84px 1fr; }
+  .lib-card img { width: 84px; }
+  .panel { padding: 16px; }
+  .step { font-size: .68rem; }
+  .step .s-dot, .t-dot { width: 26px; height: 26px; }
+  .t-step { font-size: .68rem; }
+  .info-list { grid-template-columns: 100px 1fr; }
+  .toolbar .select { min-width: 0; width: 100%; }
+  .checkout-actions .btn { flex: 1; }
+  .toasts { left: 14px; right: 14px; bottom: 14px; max-width: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
